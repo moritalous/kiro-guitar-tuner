@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="theme-color" content="#3498db" />
+    <title>ギターチューナー</title>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>ギターチューナー</h1>
+      </header>
+      
+      <main>
+        <div id="status-display">
+          <p id="status-message">マイクアクセスを許可してください</p>
+        </div>
+        
+        <div id="tuning-display">
+          <div id="note-display">
+            <span id="detected-note">--</span>
+          </div>
+          
+          <div id="tuning-meter">
+            <div id="meter-container">
+              <div id="meter-needle"></div>
+              <div id="meter-scale">
+                <span class="scale-mark left">♭</span>
+                <span class="scale-mark center">♪</span>
+                <span class="scale-mark right">♯</span>
+              </div>
+            </div>
+          </div>
+          
+          <div id="cents-display">
+            <span id="cents-value">0</span> cents
+          </div>
+        </div>
+        
+        <div id="controls">
+          <button id="start-button">開始</button>
+          <button id="stop-button" disabled>停止</button>
+          <button id="show-instructions" class="hidden">使用方法</button>
+        </div>
+        
+        <div id="instructions" class="hidden">
+          <h3>使用方法</h3>
+          <ol>
+            <li>「開始」ボタンを押してマイクアクセスを許可してください</li>
+            <li>ギターの弦を一本ずつ弾いてください</li>
+            <li>画面に表示される音程名と針の位置を確認してください</li>
+            <li>針が中央（緑色）になるようにペグを調整してください</li>
+            <li>すべての弦（E-A-D-G-B-E）をチューニングしてください</li>
+          </ol>
+          <div id="tuning-reference">
+            <h4>標準チューニング</h4>
+            <div class="string-reference">
+              <span class="string-number">6弦</span>
+              <span class="string-note">E2 (82.4Hz)</span>
+            </div>
+            <div class="string-reference">
+              <span class="string-number">5弦</span>
+              <span class="string-note">A2 (110.0Hz)</span>
+            </div>
+            <div class="string-reference">
+              <span class="string-number">4弦</span>
+              <span class="string-note">D3 (146.8Hz)</span>
+            </div>
+            <div class="string-reference">
+              <span class="string-number">3弦</span>
+              <span class="string-note">G3 (196.0Hz)</span>
+            </div>
+            <div class="string-reference">
+              <span class="string-number">2弦</span>
+              <span class="string-note">B3 (246.9Hz)</span>
+            </div>
+            <div class="string-reference">
+              <span class="string-number">1弦</span>
+              <span class="string-note">E4 (329.6Hz)</span>
+            </div>
+          </div>
+          <button id="toggle-instructions">説明を隠す</button>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
