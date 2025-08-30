@@ -5,10 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:https": "vite --https",
     "build": "tsc && vite build",
+    "build:analyze": "tsc && vite build --mode analyze",
     "preview": "vite preview",
+    "preview:https": "vite preview --https",
     "test": "vitest --run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:coverage": "vitest --run --coverage",
+    "lint": "tsc --noEmit",
+    "clean": "node -e \"require('fs').rmSync('dist', {recursive: true, force: true})\"",
+    "deploy:build": "npm run clean && npm run lint && npm run test && npm run build",
+    "deploy:test": "node scripts/production-test.js",
+    "deploy:ready": "npm run deploy:build && npm run deploy:test"
   },
   "devDependencies": {
     "jsdom": "^26.1.0",

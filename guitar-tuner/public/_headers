@@ -1,0 +1,27 @@
+# Security headers for production deployment
+/*
+  # Content Security Policy
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src 'self' blob:; connect-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';
+  
+  # Security headers
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  
+  # HTTPS enforcement (uncomment for production)
+  # Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  
+  # Permissions Policy for microphone access
+  Permissions-Policy: microphone=(self), camera=(), geolocation=(), payment=()
+  
+  # Cache control for static assets
+  Cache-Control: public, max-age=31536000, immutable
+
+# Specific cache rules for HTML
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Cache rules for assets
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
