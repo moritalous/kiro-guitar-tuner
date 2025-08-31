@@ -886,7 +886,7 @@ export class ThemeManager {
   /**
    * テーマ適用の検証
    */
-  private validateThemeApplication(theme: Theme): void {
+  private validateThemeApplication(_theme: Theme): void {
     try {
       if (!this.browserSupport.cssVariables) {
         return; // CSS変数未対応の場合は検証をスキップ

@@ -57,7 +57,7 @@ export default defineConfig({
   },
   
   // Base path for deployment
-  base: process.env.NODE_ENV === 'production' ? '/guitar-tuner/' : './',
+  base: process.env.NODE_ENV === 'production' ? '/kiro-guitar-tuner/' : './',
   
   // Environment variables
   define: {
