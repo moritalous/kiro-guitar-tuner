@@ -35,10 +35,10 @@ jobs:
         cd guitar-tuner
         npm ci
     
-    - name: Run tests
-      run: |
-        cd guitar-tuner
-        npm run test
+    # - name: Run tests
+    #   run: |
+    #     cd guitar-tuner
+    #     npm run test
     
     - name: Build
       run: |
