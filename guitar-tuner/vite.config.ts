@@ -57,7 +57,7 @@ export default defineConfig({
   },
   
   // Base path for deployment
-  base: './',
+  base: process.env.NODE_ENV === 'production' ? '/guitar-tuner/' : './',
   
   // Environment variables
   define: {
