@@ -107,3 +107,9 @@ export const TUNING_TOLERANCE_CENTS = 5;
  * UI更新の頻度制限 (FPS)
  */
 export const MAX_UPDATE_FPS = 60;
+
+/**
+ * テーマ関連の型定義
+ */
+export type Theme = 'light' | 'dark';
+export type ThemePreference = 'light' | 'dark' | 'system';

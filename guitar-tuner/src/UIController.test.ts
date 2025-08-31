@@ -223,7 +223,7 @@ describe('UIController', () => {
       
       // 3セントは53%の位置に相当 ((3 + 50) / 100 * 100 = 53%)
       expect(needleElement.style.left).toBe('53%');
-      expect(needleElement.style.backgroundColor).toBe('var(--success-color)');
+      expect(needleElement.style.backgroundColor).toBe('var(--tuning-perfect)');
     });
 
     it('少しずれた音程（±15セント以内）で黄色の針を表示する', () => {
@@ -232,7 +232,7 @@ describe('UIController', () => {
       
       // -10セントは40%の位置に相当 ((-10 + 50) / 100 * 100 = 40%)
       expect(needleElement.style.left).toBe('40%');
-      expect(needleElement.style.backgroundColor).toBe('var(--warning-color)');
+      expect(needleElement.style.backgroundColor).toBe('var(--tuning-off)');
     });
 
     it('大きくずれた音程で赤色の針を表示する', () => {
@@ -241,7 +241,7 @@ describe('UIController', () => {
       
       // 25セントは75%の位置に相当 ((25 + 50) / 100 * 100 = 75%)
       expect(needleElement.style.left).toBe('75%');
-      expect(needleElement.style.backgroundColor).toBe('var(--danger-color)');
+      expect(needleElement.style.backgroundColor).toBe('var(--tuning-very-off)');
     });
 
     it('範囲外の値を適切に制限する', () => {

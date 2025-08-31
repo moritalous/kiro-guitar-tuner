@@ -31,7 +31,19 @@
   <body>
     <div id="app">
       <header>
-        <h1>ギターチューナー</h1>
+        <div class="header-content">
+          <h1>ギターチューナー</h1>
+          <button 
+            id="theme-toggle" 
+            aria-label="テーマを切り替え" 
+            aria-pressed="false"
+            title="ダークモード/ライトモードを切り替え"
+            class="theme-toggle-button"
+          >
+            <span class="theme-icon" aria-hidden="true">🌙</span>
+            <span class="sr-only">現在: ライトモード</span>
+          </button>
+        </div>
       </header>
       
       <main>

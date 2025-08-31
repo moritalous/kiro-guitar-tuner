@@ -5,6 +5,7 @@ import { AudioManager } from './AudioManager.js'
 import { PitchDetector } from './PitchDetector.js'
 import { TunerEngine } from './TunerEngine.js'
 import { UIController } from './UIController.js'
+import { ThemeManager } from './ThemeManager.js'
 
 /**
  * ギターチューナーアプリケーションのメインエントリーポイント
@@ -15,6 +16,7 @@ class GuitarTunerApp {
   private pitchDetector: PitchDetector | null = null;
   private tunerEngine: TunerEngine;
   private uiController: UIController;
+  private themeManager: ThemeManager;
   private processingLoopId: number | null = null;
   private lastUpdateTime: number = 0;
   private readonly updateInterval: number = 1000 / MAX_UPDATE_FPS; // 60FPS制限
@@ -30,6 +32,11 @@ class GuitarTunerApp {
     this.audioManager = new AudioManager();
     this.tunerEngine = new TunerEngine();
     this.uiController = new UIController();
+    this.themeManager = new ThemeManager();
+    
+    // UIControllerとThemeManagerを連携
+    this.uiController.setThemeManager(this.themeManager);
+    
     this.initializeApp();
     this.initializeResponsiveHandlers();
     this.initializeVisibilityHandling();
@@ -47,6 +54,9 @@ class GuitarTunerApp {
       console.error('必要なDOM要素が見つかりません');
       return;
     }
+
+    // テーマシステムの初期化処理
+    this.initializeThemeSystem();
 
     // イベントリスナーの設定
     const startHandler = () => this.handleStart();
@@ -146,6 +156,81 @@ class GuitarTunerApp {
 
     // UIControllerに状態を通知
     this.uiController.updateAppState(this.currentState);
+  }
+
+  /**
+   * テーマシステムの初期化処理
+   * 保存されたテーマ設定の復元とシステムテーマ変更の監視を設定
+   */
+  private initializeThemeSystem(): void {
+    try {
+      console.log('テーマシステムを初期化中...');
+      
+      // ThemeManagerの初期化（システムテーマ検出と保存設定復元）
+      this.themeManager.initialize();
+      
+      // テーマ切り替えボタンのイベントリスナー設定
+      this.themeManager.setupThemeToggleButton();
+      
+      // システムテーマ変更のリアルタイム監視を開始
+      this.setupSystemThemeMonitoring();
+      
+      console.log('テーマシステムの初期化が完了しました');
+      
+    } catch (error) {
+      console.warn('テーマシステムの初期化に失敗しました:', error);
+      // テーマシステムの失敗はアプリケーション全体の動作を妨げないため、
+      // エラーログのみ出力してアプリケーションの初期化を継続
+    }
+  }
+
+  /**
+   * システムテーマ変更のリアルタイム監視を設定
+   * prefers-color-scheme の変更を検出してテーマを自動更新
+   */
+  private setupSystemThemeMonitoring(): void {
+    if (typeof window === 'undefined' || !window.matchMedia) {
+      console.warn('matchMedia APIが利用できません。システムテーマの自動切り替えは無効です。');
+      return;
+    }
+
+    try {
+      // システムテーマ変更の監視
+      const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      
+      const systemThemeChangeHandler = (event: MediaQueryListEvent) => {
+        console.log('システムテーマが変更されました:', event.matches ? 'dark' : 'light');
+        
+        // ThemeManagerのシステムテーマ変更処理は内部で自動的に処理されるため、
+        // ここでは追加のログ出力のみ行う
+        const currentSettings = this.themeManager.getThemeSettings();
+        
+        if (currentSettings.preference === 'system') {
+          console.log('ユーザー設定が"system"のため、テーマを自動更新しました');
+        } else {
+          console.log('ユーザー設定が手動のため、テーマは変更されませんでした');
+        }
+      };
+      
+      // モダンブラウザ用
+      if (darkModeQuery.addEventListener) {
+        darkModeQuery.addEventListener('change', systemThemeChangeHandler);
+      }
+      // 古いブラウザ用フォールバック
+      else if (darkModeQuery.addListener) {
+        darkModeQuery.addListener(systemThemeChangeHandler);
+      }
+      
+      // イベントリスナーを追跡（クリーンアップ用）
+      this.eventListeners.push({
+        element: darkModeQuery as any,
+        event: 'change',
+        handler: systemThemeChangeHandler as EventListener
+      });
+      
+    } catch (error) {
+      console.warn('システムテーマ監視の設定に失敗しました:', error);
+    }
   }
 
   /**
@@ -711,9 +796,22 @@ class GuitarTunerApp {
       await this.audioManager.cleanup();
     }
     
+    // ThemeManagerをクリーンアップ
+    this.themeManager.destroy();
+    
     // すべてのイベントリスナーを削除
     this.eventListeners.forEach(({ element, event, handler }) => {
-      element.removeEventListener(event, handler);
+      try {
+        // MediaQueryList の場合は特別な処理が必要
+        if (element && typeof (element as any).removeEventListener === 'function') {
+          element.removeEventListener(event, handler);
+        } else if (element && typeof (element as any).removeListener === 'function') {
+          // 古いブラウザのMediaQueryList用フォールバック
+          (element as any).removeListener(handler);
+        }
+      } catch (error) {
+        console.warn('イベントリスナーの削除に失敗しました:', error);
+      }
     });
     this.eventListeners = [];
     
